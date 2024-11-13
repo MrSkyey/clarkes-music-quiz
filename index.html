@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clarkes Music Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+            margin: 0;
+        }
+        #quiz-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            background-color: #f0f0f0;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .options li:hover {
+            background-color: #d9d9d9;
+        }
+        .hidden {
+            display: none;
+        }
+        #score {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        #restart-btn {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #restart-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <h1>Clarke’s Music Quiz</h1>
+    <div id="question-container">
+        <p class="question"></p>
+        <ul class="options"></ul>
+    </div>
+    <p id="score" class="hidden">Score: 0</p>
+    <button id="restart-btn" class="hidden">Restart Quiz</button>
+</div>
+
+<script>
+    const quizData = [
+        {
+            question: "Who is known as the 'King of Pop'?",
+            options: ["Elvis Presley", "Michael Jackson", "Prince", "Justin Bieber"],
+            answer: "Michael Jackson"
+        },
+        {
+            question: "Which singer is known for the hit song 'Rolling in the Deep'?",
+            options: ["Adele", "Beyoncé", "Rihanna", "Taylor Swift"],
+            answer: "Adele"
+        },
+        {
+            question: "The Grammy Awards are primarily associated with which industry?",
+            options: ["Film", "Literature", "Music", "Fashion"],
+            answer: "Music"
+        },
+        {
+            question: "Which band released the album 'Abbey Road'?",
+            options: ["The Rolling Stones", "The Beatles", "Queen", "Pink Floyd"],
+            answer: "The Beatles"
+        },
+        {
+            question: "Who is the youngest solo artist to achieve a Grammy win for Album of the Year?",
+            options: ["Billie Eilish", "Taylor Swift", "Lorde", "Justin Bieber"],
+            answer: "Billie Eilish"
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const questionContainer = document.getElementById("question-container");
+    const questionEl = document.querySelector(".question");
+    const optionsEl = document.querySelector(".options");
+    const scoreEl = document.getElementById("score");
+    const restartBtn = document.getElementById("restart-btn");
+
+    function loadQuestion() {
+        const currentQuestion = quizData[currentQuestionIndex];
+        questionEl.textContent = currentQuestion.question;
+        optionsEl.innerHTML = "";
+        currentQuestion.options.forEach(option => {
+            const li = document.createElement("li");
+            li.textContent = option;
+            li.addEventListener("click", () => selectOption(option));
+            optionsEl.appendChild(li);
+        });
+    }
+
+    function selectOption(selectedOption) {
+        const currentQuestion = quizData[currentQuestionIndex];
+        if (selectedOption === currentQuestion.answer) {
+            score++;
+        }
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            showScore();
+        }
+    }
+
+    function showScore() {
+        questionContainer.classList.add("hidden");
+        scoreEl.textContent = `Score: ${score}/${quizData.length}`;
+        scoreEl.classList.remove("hidden");
+        restartBtn.classList.remove("hidden");
+    }
+
+    function restartQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        questionContainer.classList.remove("hidden");
+        scoreEl.classList.add("hidden");
+        restartBtn.classList.add("hidden");
+        loadQuestion();
+    }
+
+    restartBtn.addEventListener("click", restartQuiz);
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
